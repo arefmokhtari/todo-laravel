@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Test;
+use \Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', Test::class);
+Route::get('/test', [Test::class, 'get']);
 
+Route::get('/test/{id}', [Test::class, 'getById']);
 
