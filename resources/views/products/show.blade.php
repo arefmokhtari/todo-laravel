@@ -1,3 +1,3 @@
 
 
-<p>{{$product?->name}}</p>
+<p>{{$product->name}}</p>

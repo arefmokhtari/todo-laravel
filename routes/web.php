@@ -20,5 +20,8 @@ Route::get('/', function () {
 
 Route::get('/test', [Test::class, 'get']);
 
+Route::post('/test', [Test::class, 'store']);
+
 Route::get('/test/{id}', [Test::class, 'getById']);
+
 
