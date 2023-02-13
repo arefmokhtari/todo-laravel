@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
     //
     private function getProducts($id = null){
         return $id ? Product::find($id) : Product::all();
@@ -39,7 +38,7 @@ class ProductController extends Controller
     public function deleteById(int $id){
         $product = $this->getProducts($id);
 
-        if($product) $product->delete();
+        $product?->delete();
 
         return response()->json([
             'ok' => !empty($product),
@@ -55,7 +54,7 @@ class ProductController extends Controller
             'price' => 'integer',
         ]);
 
-        if($product) $product->update($validate);
+        $product?->update($validate);
 
         return response()->json([
             'ok' => !empty($product),
