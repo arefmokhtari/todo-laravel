@@ -18,10 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', [Test::class, 'get']);
-
-Route::post('/test', [Test::class, 'store']);
-
-Route::get('/test/{id}', [Test::class, 'getById']);
-
 
