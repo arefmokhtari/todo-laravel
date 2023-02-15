@@ -25,7 +25,7 @@ Route::get('/products', [ProductController::class, 'get']);
 Route::get('/products/{id}', [ProductController::class, 'getById']);
 
 //
-Route::group(['middleware' => ['auth:sanctum']], function() {
+Route::group(['middleware' => ['auth:admin']], function() {
     Route::post('/products', [ProductController::class, 'store']);
 
     Route::put('/products/{id}', [ProductController::class, 'updateById']);
