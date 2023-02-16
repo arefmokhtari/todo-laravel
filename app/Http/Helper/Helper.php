@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Http\Helper;
 
 
 class Helper {
@@ -11,3 +12,5 @@ class Helper {
         ], $status);
     }
 }
+
+

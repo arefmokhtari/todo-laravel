@@ -8,4 +8,14 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Model
 {
     use HasFactory, HasApiTokens;
+
+    protected $table = 'users';
+
+    protected $fillable = [
+        'name' , 'password' , 'profiles' ,
+    ];
+
+    protected $hidden = [
+        'password' ,
+    ];
 }

@@ -2,84 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper\Helper;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+class UserController extends Controller {
+    private static function validateUser(Request $request, array $any = []){
+        return $request->validate([
+            'name' => ['string', 'required', ... $any],
+            'password' => ['string', 'required',],
+        ]);
+    }
+    public function signUp(Request $request) {
+        self::validateUser($request, ['unique:users',]);
+
+        return Helper::result(
+          true,
+            'user created',
+            User::create([
+                'name' => $request->name,
+                'password' => Hash::make($request->password),
+            ]),
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function login(Request $request) {
+        self::validateUser($request);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $user = User::where('name', $request->name)->first();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
+        if($user && Hash::check($request->password ,$user->value('password')))
+            return Helper::result(true, 'done', array_merge(['token' => $user->createToken('user_token')->plainTextToken], $user->toArray()));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
+        return Helper::result(false, 'not found', null, 404);
     }
 }
