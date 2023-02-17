@@ -15,16 +15,22 @@ use \App\Http\Controllers\ClassController;
 |
 */
 
+//      -> classes
+
+Route::post('/classes', [ClassController::class, 'store']);
+
+Route::get('classes/student/{classId}', [ClassController::class, 'getStudentByClassId']);
+Route::get('/classes/{id}', [ClassController::class, 'getById']);
+
+//      -> add student to class
+Route::post('/classes/add_student', [ClassController::class, 'addStudent']);
 
 //      -> students
 
 Route::post('/students', [StudentController::class, 'store']);
 
-Route::get('/students/user_class/{id}', [StudentController::class, 'getClass']);
+Route::get('/students/class/{studentId}', [StudentController::class, 'getClass']);
 
 Route::get('/students/{id}', [StudentController::class, 'getById']);
 
-Route::post('/students/add_to_class', [StudentController::class, 'addToClass']);
-//      -> classes
 
-Route::post('/classes', [ClassController::class, 'store']);
