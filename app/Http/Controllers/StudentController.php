@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Http\Helper\Helper;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class StudentController extends Controller
     }
 
     public function getById(string $id) {
-        return Helper::result(Student::query()->find($id), ['messageError' => 'not found', 'statusError' => 404]);
+        return Helper::result(new StudentResource(Student::query()->with(['classes'])->find($id)), ['messageError' => 'not found', 'statusError' => 404]);
     }
 
     public function getClass(string $studentId){
