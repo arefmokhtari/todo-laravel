@@ -20,6 +20,6 @@ class StudentController extends Controller
     }
 
     public function getClass(string $studentId){
-        return Helper::result(Student::query()->find($studentId)?->classes?->all());
+        return Helper::result(Student::query()->with(['classes'])->find($studentId)?->classes?->all());
     }
 }
