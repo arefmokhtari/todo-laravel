@@ -17,7 +17,7 @@ class StudentController extends Controller
     }
 
     public function getById(string $id) {
-        return Helper::result(new StudentResource(Student::query()->with(['classes'])->find($id)), ['messageError' => 'not found', 'statusError' => 404]);
+        return Helper::result(new StudentResource(Student::query()->with(['classes'])->findOrFail($id)), ['messageError' => 'not found', 'statusError' => 404]);
     }
 
     public function getClass(string $studentId){

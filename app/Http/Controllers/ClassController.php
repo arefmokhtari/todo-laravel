@@ -18,12 +18,12 @@ class ClassController extends Controller
     }
 
     public function getById(string $id) {
-        return Helper::result(new ClassResource(Classes::query()->with(['students'])->find($id)), ['messageError' => 'not found', 'statusError' => 404]);
+        return Helper::result(new ClassResource(Classes::query()->with(['students'])->findOrFail($id)), ['messageError' => 'not found', 'statusError' => 404]);
     }
     public function addStudent(Request $request){
         $validate = Helper::validateAddClass($request);
 
-        $class = Classes::query()->find($validate['class_id']);
+        $class = Classes::query()->findOrFail($validate['class_id']);
 
         $class?->students()->attach($validate['student_id']);
 
@@ -31,6 +31,6 @@ class ClassController extends Controller
     }
 
     public function getStudentByClassId(string $classId){
-        return Helper::result(Classes::query()->with(['students'])->find($classId)?->students?->all());
+        return Helper::result(Classes::query()->with(['students'])->findOrFail($classId)?->students?->all());
     }
 }
