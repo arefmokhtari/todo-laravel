@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helper\Helper;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,18 +30,23 @@ class UserController extends Controller { // 1|A4fquVbx0eRt6XuYcmUA8YsXTNCp0L3qf
     }
 
     public function get() {
-        return Helper::result(auth('user')->user());
+        return Helper::result(new UserResource(auth('user')->user()));
     }
 
     public function addProfile(Request $request) {
-        $validate = $request->validate(['image' => ['required','mimes:jpeg,png,jpg']]);
+        $request->validate(['image' => ['required','mimes:jpeg,png,jpg']]);
 
+        $fileName = time() . uniqid() . '.' . $request->image->getClientOriginalExtension();
 
+        $request->image->storeAs('images', $fileName, 'public');
 
-        return $request;
+        $user = $request->user();
+        $user->update(['profiles' => [... json_decode($user->profiles ?? '[]'), $fileName]]);
+
+        return Helper::result(null, ['ok' => true, 'message' => 'done']);
     }
 
-    public function removeProfile(Request $request) {
+    public function removeProfile(string $id) {
 
     }
 
