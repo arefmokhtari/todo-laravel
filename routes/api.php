@@ -14,10 +14,10 @@ use \App\Http\Controllers\UserController;
 |
 */
 
-Route::post('/user/sign_up', [UserController::class, 'signUp']);
+Route::post('/user/sign-up', [UserController::class, 'signUp']);
 Route::post('/user/login', [UserController::class, 'login']);
 
-
 Route::group(['middleware' => ['auth:user']], function() {
-
+    Route::get('/user', [UserController::class, 'get']);
+    Route::post('/user/add-profile', [UserController::class, 'addProfile']);
 });
