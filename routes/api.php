@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\AdminController;
+use \App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::post('/admins/create-main-admin', function(){
+//    \App\Admin::create([
+//        'name' => 'aref',
+//        'password' => \Illuminate\Support\Facades\Hash::make('aref'),
+//        'permission' => true,
+//    ]);
+//    return 'ok';
+//});
+
+
+Route::post('/admins/login', [AdminController::class, 'login']);
+
+Route::group(['middleware' => ['auth:admin']], function(){
+
+    Route::post('/products', [ProductController::class, 'store']);
+
+    Route::get('/products/{id}', [ProductController::class, 'getById']);
+
+    Route::get('/products', [ProductController::class, 'get']);
+
+    Route::delete('/products/{id}', [ProductController::class, 'deleteById']);
+
+    Route::put('/products/{id}', [ProductController::class, 'updateById']);
 });
