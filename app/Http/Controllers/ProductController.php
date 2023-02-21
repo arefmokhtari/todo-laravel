@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Helper\Helper;
 use App\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use PHPUnit\Framework\Warning;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+
 class ProductController extends Controller
 {
     private $accsesses = [
@@ -48,10 +48,10 @@ class ProductController extends Controller
     }
 
     /**
-     * @throws BadRequestException
+     * @throws ModelNotFoundException
      */
     private function checkAccess(){
         if(in_array(Helper::getEndsWith(Route::currentRouteAction()), $this->accsesses) && !auth('admin')->user()->hasAccess())
-            throw new BadRequestException('s', 400);
+            throw new ModelNotFoundException('s', 400);
     }
 }
