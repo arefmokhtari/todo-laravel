@@ -27,6 +27,7 @@ use \App\Http\Controllers\ProductController;
 Route::post('/admins/login', [AdminController::class, 'login']);
 
 Route::group(['middleware' => ['auth:admin']], function(){
+    Route::post('/admins', [AdminController::class, 'store']);
 
     Route::post('/products', [ProductController::class, 'store']);
 

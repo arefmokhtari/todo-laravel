@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helper\Helper;
+use App\Http\Helper\HasAccess;
 use App\Product;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 class ProductController extends Controller
 {
-    private $accsesses = [
+    use HasAccess;
+    protected array $accesses = [
         'store',
         'deleteById',
         'updateById',
     ];
+
     public function __construct(){
         // parent::__construct();
-        $this->checkAccess();
+        $this
+            ->setAccess($this->accesses)
+            ->checkAccess();
     }
     public function store(Request $request){
         return Helper::result(Product::create($request->validate([
@@ -45,13 +48,5 @@ class ProductController extends Controller
             'description' => ['string', 'nullable'],
             'price' => ['integer', 'nullable'],
         ])));
-    }
-
-    /**
-     * @throws ModelNotFoundException
-     */
-    private function checkAccess(){
-        if(in_array(Helper::getEndsWith(Route::currentRouteAction()), $this->accsesses) && !auth('admin')->user()->hasAccess())
-            throw new ModelNotFoundException('s', 400);
     }
 }
