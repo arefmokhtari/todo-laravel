@@ -29,13 +29,22 @@ return [
     */
 
     'disks' => [
+        'public_uploads' => [
+            'driver' => 'local',
+            'root' => public_path(),
+            'throw' => false,
+        ],
 
+        'base' => [
+            'driver' => 'local',
+            'root' => base_path(),
+            'throw' => false,
+        ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
             'throw' => false,
         ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
