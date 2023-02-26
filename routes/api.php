@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AdminController;
+use \App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +14,10 @@ use \App\Http\Controllers\AdminController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+//      -> user
+Route::post('/user', [UserController::class, 'store']);
+
 
 //      -> Admin:
 
