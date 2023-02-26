@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Helpers\Traits\HasLoginSign;
 use Genocide\Radiocrud\Exceptions\CustomException;
 use Genocide\Radiocrud\Services\ActionService\ActionService;
 use App\Models\Admin;
@@ -12,12 +13,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminAction extends ActionService
 {
-    use HasInitialize;
+    use HasInitialize, HasLoginSign;
 
     protected array $validationRules = [
         'login' => [
-            'name' => ['string', 'max:70', 'required'],
-            'password' => ['string', 'max:150', 'required'],
+            'name' => ['string', 'max:70', 'required',],
+            'password' => ['string', 'max:150', 'required',],
         ],
     ];
 
@@ -27,26 +28,5 @@ class AdminAction extends ActionService
             ->setResource(AdminResource::class)
             ->setRequest($request);
         parent::__construct();
-    }
-
-
-    /**
-     * @throws CustomException
-     */
-    public function login(): array|CustomException {
-        $admin = $this->getAdminByName();
-
-        if(Hash::check($this->getRequest()->password, $admin->password))
-            return ['token' => $admin->createToken('admin_token')->plainTextToken];
-
-        return throw new CustomException('ur name | passwd is wrong ', 84, 400);
-    }
-
-    /**
-     * @throws CustomException
-     */
-    private function getAdminByName(): object {
-        $this->getEloquent()->where('name', $this->getRequest()->name);
-        return $this->getFirstByEloquent();
     }
 }

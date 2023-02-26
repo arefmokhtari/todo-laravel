@@ -18,17 +18,19 @@ use \App\Http\Controllers\UserController;
 //      -> user
 Route::post('/user', [UserController::class, 'store']);
 
+Route::post('/user/login', [UserController::class, 'login']);
 
 //      -> Admin:
 
 Route::post('/admin', [AdminController::class, 'login']);
+
 
 //Route::post('/admin/create', function (){
 //    \App\Models\Admin::create([
 //        'name' => 'aref',
 //        'password' => \Illuminate\Support\Facades\Hash::make('aref'),
 //    ]);
-//    return \App\Helpers\Helper::result(['ok' => true]);
+//    return \App\Helpers\Helper::result(null, [ 'ok' => true ]);
 //});
 
 

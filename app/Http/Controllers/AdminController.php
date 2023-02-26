@@ -18,7 +18,7 @@ class AdminController extends Controller {
             AdminAction::init($request)
                 ->setValidationRule('login')
                 ->makeEloquentViaRequest()
-                ->login()
+                ->loginByRequest()
         );
     }
 }
