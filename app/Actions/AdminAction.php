@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminAction extends ActionService
 {
     use HasInitialize;
-    private $admin = null;
+
     protected array $validationRules = [
         'login' => [
             'name' => ['string', 'max:70', 'required'],
