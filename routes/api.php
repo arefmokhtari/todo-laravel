@@ -15,6 +15,10 @@ use \App\Http\Controllers\UserController;
 |
 */
 
+Route::group(['middleware' => ['auth:admin']], function(){
+    Route::get('/user',[UserController::class,'get']);
+});
+
 //      -> user
 Route::post('/user', [UserController::class, 'store']);
 

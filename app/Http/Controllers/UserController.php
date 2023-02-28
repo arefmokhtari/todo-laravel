@@ -21,6 +21,14 @@ class UserController extends Controller {
         );
     }
 
+    public function get(){
+        // dd(auth()->user());
+
+        return Helper::result(
+            ['ok' => true],
+        );
+    }
+
     public function login(Request $request) {
         return Helper::result(
             UserAction::init($request)
