@@ -3,6 +3,8 @@
 namespace App\Actions;
 
 use App\Helpers\Traits\HasLoginSign;
+use App\Helpers\Traits\HasMember;
+use Genocide\Radiocrud\Helpers;
 use Genocide\Radiocrud\Services\ActionService\ActionService;
 use App\Models\User;
 use App\Http\Resources\UserResource;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserAction extends ActionService
 {
-    use HasInitialize, HasLoginSign;
+    use HasInitialize, HasLoginSign, HasMember;
     protected array $validationRules = [
         'store' => [
             'name' => ['string', 'nullable', 'max:200',],
@@ -39,7 +41,12 @@ class UserAction extends ActionService
 
     public function storeByRequest(callable $storing = null): mixed {
         $this->request['password'] = Hash::make($this->getRequest()->password);
-
         return parent::storeByRequest($storing);
+    }
+
+    public function setRequest(Request|null $request): static {
+        if(Helpers::convertToBoolean($request))
+            return parent::setRequest($request);
+        return $this;
     }
 }

@@ -22,10 +22,8 @@ class UserController extends Controller {
     }
 
     public function get(){
-        // dd(auth()->user());
-
         return Helper::result(
-            ['ok' => true],
+            UserAction::init()->getMember()
         );
     }
 
