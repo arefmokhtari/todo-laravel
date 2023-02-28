@@ -23,6 +23,10 @@ class UserAction extends ActionService
             'name' => ['string', 'nullable', 'max:200',],
             'email' => ['string', 'nullable', 'max:200', 'email', 'unique:users', ],
         ],
+        'login' => [
+            'password' => ['string', 'required', 'max:200', ],
+            'email' => ['string', 'required', 'max:200', 'email', ], //'regex:/(.+)@(.+)\.(.+)/i'],
+        ],
     ];
     public function __construct(Request $request = null)
     {

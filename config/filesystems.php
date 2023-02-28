@@ -29,17 +29,7 @@ return [
     */
 
     'disks' => [
-        'public_uploads' => [
-            'driver' => 'local',
-            'root' => public_path(),
-            'throw' => false,
-        ],
 
-        'base' => [
-            'driver' => 'local',
-            'root' => base_path(),
-            'throw' => false,
-        ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -65,7 +55,17 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-
+        'public_uploads' => [
+            'driver' => 'local',
+            'root' => public_path(),
+            'throw' => false,
+        ],
+        
+        'base' => [
+            'driver' => 'local',
+            'root' => base_path(),
+            'throw' => false,
+        ],
     ],
 
     /*

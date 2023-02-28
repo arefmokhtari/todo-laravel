@@ -32,7 +32,7 @@ class UserController extends Controller {
     public function login(Request $request) {
         return Helper::result(
             UserAction::init($request)
-            ->setValidationRule('store')
+            ->setValidationRule('login')
             ->makeEloquentViaRequest()
             ->loginByRequest('email', 'user')
         );

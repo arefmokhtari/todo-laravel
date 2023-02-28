@@ -15,7 +15,7 @@ use \App\Http\Controllers\UserController;
 |
 */
 
-Route::group(['middleware' => ['auth:admin']], function(){
+Route::group(['middleware' => ['auth:user']], function(){
     Route::get('/user',[UserController::class,'get']);
 });
 
