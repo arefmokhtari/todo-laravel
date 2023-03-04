@@ -2,18 +2,16 @@
 
 namespace App\Actions;
 
-use App\Helpers\Traits\HasLoginSign;
-use Genocide\Radiocrud\Exceptions\CustomException;
-use Genocide\Radiocrud\Services\ActionService\ActionService;
+use App\Helpers\Classes\MainAction;
+use App\Helpers\Traits\HasLogin;
 use App\Models\Admin;
 use App\Http\Resources\AdminResource;
-use App\Helpers\Traits\HasInitialize;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
-class AdminAction extends ActionService
+
+class AdminAction extends MainAction
 {
-    use HasInitialize, HasLoginSign;
+    use HasLogin;
 
     protected array $validationRules = [
         'login' => [

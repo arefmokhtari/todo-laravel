@@ -5,7 +5,7 @@ namespace App\Helpers\Traits;
 use Genocide\Radiocrud\Exceptions\CustomException;
 use Illuminate\Support\Facades\Hash;
 
-trait HasLoginSign {
+trait HasLogin {
     /**
      * @throws CustomException
      */

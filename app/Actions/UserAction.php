@@ -2,19 +2,19 @@
 
 namespace App\Actions;
 
-use App\Helpers\Traits\HasLoginSign;
+use App\Helpers\Classes\MemberAction;
+use App\Helpers\Traits\HasLogin;
 use App\Helpers\Traits\HasMember;
+use Genocide\Radiocrud\Exceptions\CustomException;
 use Genocide\Radiocrud\Helpers;
-use Genocide\Radiocrud\Services\ActionService\ActionService;
 use App\Models\User;
 use App\Http\Resources\UserResource;
-use App\Helpers\Traits\HasInitialize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UserAction extends ActionService
+class UserAction extends MemberAction
 {
-    use HasInitialize, HasLoginSign, HasMember;
+    use HasLogin, HasMember;
     protected array $validationRules = [
         'store' => [
             'name' => ['string', 'nullable', 'max:200',],
@@ -23,7 +23,8 @@ class UserAction extends ActionService
         ],
         'update' => [
             'name' => ['string', 'nullable', 'max:200',],
-            'email' => ['string', 'nullable', 'max:200', 'email', 'unique:users', ],
+            'email' => ['string', 'nullable', 'max:200', 'email', ],//'unique:users', ],
+            'phone_number' => ['string', 'max:50', 'nullable'],
         ],
         'login' => [
             'password' => ['string', 'required', 'max:200', ],
@@ -39,9 +40,11 @@ class UserAction extends ActionService
         parent::__construct();
     }
 
-    public function storeByRequest(callable $storing = null): mixed {
-        $this->request['password'] = Hash::make($this->getRequest()->password);
-        return parent::storeByRequest($storing);
+    /**
+     * @throws CustomException
+     */
+    public function updateMemberByToken(): bool|int {
+        return $this->updateByIdAndRequest($this->getMember()->id);
     }
 
     public function setRequest(Request|null $request): static {
@@ -49,4 +52,11 @@ class UserAction extends ActionService
             return parent::setRequest($request);
         return $this;
     }
+
+    public function storeByRequest(callable $storing = null): mixed {
+        $this->request['password'] = Hash::make($this->getRequest()->password);
+        return parent::storeByRequest($storing);
+    }
+
+
 }
