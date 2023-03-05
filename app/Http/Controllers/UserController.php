@@ -77,4 +77,13 @@ class UserController extends Controller {
                 ->checkOtp()
         );
     }
+
+    public function changePassword(Request $request) {
+        return Helper::result(
+            UserAction::init($request)
+                ->setValidationRule('change-password')
+                ->makeEloquentViaRequest()
+                ->changePassword()
+        , ['message' => 'password changed']);
+    }
 }

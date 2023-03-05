@@ -19,6 +19,8 @@ Route::group(['middleware' => ['auth:user']], function(){
     Route::get('/user',[UserController::class,'getInfo']);
 
     Route::put('/user', [UserController::class, 'update']);
+
+    Route::post('/user/change-password', [UserController::class, 'changePassword']);
 });
 
 //      -> user

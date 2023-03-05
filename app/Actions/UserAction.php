@@ -38,6 +38,10 @@ class UserAction extends MemberAction
             'email' => ['required', 'max:200', 'email', ],
             'otp' => ['required', 'integer', ],
         ],
+        'change-password' => [
+            'current_password' => ['string', 'nullable', 'max:200', ],
+            'new_password' => ['string', 'required', 'max:200', ],
+        ],
     ];
     public function __construct(Request $request = null)
     {
@@ -98,7 +102,25 @@ class UserAction extends MemberAction
         return throw new CustomException('otp is wrong', 401, 401);
     }
 
-    private function setUserByEmail(){
+    /**
+     * @throws CustomException
+     */
+    private function setUserByEmail(): static {
         return $this->setEloquent($this->getMemberByQuery('email'));
+    }
+
+    /**
+     * @throws CustomException
+     */
+    public function changePassword() {
+        $this->setEloquent($this->getMember());
+
+        if($this->getEloquent()->should_change_password || Hash::check($this->getRequest()->current_password, $this->getEloquent()->password))
+            return $this->updateByFieldQuery([
+               'password' => Hash::make($this->getRequest()->new_password),
+                'should_change_password' => false,
+            ]);
+
+        return throw new CustomException('current password is wrong', 400, 400 );
     }
 }
