@@ -28,6 +28,7 @@ Route::post('/user/login', [UserController::class, 'login']);
 
 Route::post('/user/send-code', [UserController::class, 'sendCode']);
 
+Route::post('/user/check-otp', [UserController::class, 'checkOtp']);
 //      -> Admin:
 
 Route::post('/admin', [AdminController::class, 'login']);

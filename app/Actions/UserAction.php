@@ -32,7 +32,11 @@ class UserAction extends MemberAction
             'email' => ['string', 'required', 'max:200', 'email', ], //'regex:/(.+)@(.+)\.(.+)/i'],
         ],
         'send-code' => [
-            'email' => ['string', 'required', 'max:200', 'email', ],
+            'email' => ['required', 'max:200', 'email', ],
+        ],
+        'check-otp' => [
+            'email' => ['required', 'max:200', 'email', ],
+            'otp' => ['required', 'integer', ],
         ],
     ];
     public function __construct(Request $request = null)
@@ -67,7 +71,7 @@ class UserAction extends MemberAction
      * @throws CustomException
      */
     public function sendCode(): void {
-        $this->setEloquent($this->getMemberByQuery('email'));
+        $this->setUserByEmail();
 
         if(!$this->getEloquent()->otp_expires_at || Carbon::now()->toDate()->diff(Carbon::parse($this->getEloquent()['otp_expires_at'])->toDate())->i > $this->sendCodeSecond) {
             $this->updateByFieldQuery([
@@ -75,5 +79,26 @@ class UserAction extends MemberAction
                 'otp_expires_at' => Carbon::now(),
             ]);
         }
+    }
+
+    /**
+     * @throws CustomException
+     */
+    public function checkOtp(): array|CustomException {
+        $this->setUserByEmail();
+
+        if($this->getRequest()->otp == $this->getEloquent()->otp) {
+            $this->updateByFieldQuery([
+                'should_change_password' => true,
+                'otp' => null,
+                'otp_expires_at' => null,
+            ]);
+            return ['token' => $this->createToken($this->getEloquent(), 'user')];
+        }
+        return throw new CustomException('otp is wrong', 401, 401);
+    }
+
+    private function setUserByEmail(){
+        return $this->setEloquent($this->getMemberByQuery('email'));
     }
 }

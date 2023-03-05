@@ -65,4 +65,16 @@ class UserController extends Controller {
                 ->sendCode()
         , ['ok' => 'true', 'message' => 'code sending']);
     }
+
+    /**
+     * @throws CustomException
+     */
+    public function checkOtp(Request $request): JsonResponse {
+        return Helper::result(
+            UserAction::init($request)
+                ->setValidationRule('check-otp')
+                ->makeEloquentViaRequest()
+                ->checkOtp()
+        );
+    }
 }

@@ -13,7 +13,7 @@ trait HasLogin {
         $member = $this->getMemberByQuery($signBy);
 
         if(Hash::check($this->getRequest()->password, $member->password))
-            return ['token' => $member->createToken($tokenType.'_token')->plainTextToken];
+            return ['token' => $this->createToken($member, $tokenType)];
 
         return throw new CustomException("ur $signBy | passwd is wrong", 84, 400);
     }
@@ -25,5 +25,9 @@ trait HasLogin {
         $this->getEloquent()->where($signBy, $this->getRequest()[$signBy]);
 
         return $this->getFirstByEloquent();
+    }
+
+    private function createToken($member, string $type) {
+        return $member->createToken($type.'_token')->plainTextToken;
     }
 }
