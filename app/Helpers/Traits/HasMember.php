@@ -9,7 +9,7 @@ trait HasMember {
     protected Authenticatable $member;
 
     public function getMember(): ?Authenticatable { // check if request & user is existed, else return auth user
-        return $this->member ?? ($this->member = $this->getRequest()?->user() ?? auth()->user());
+        return $this->member ?? ($this->member = isset($this->request)? $this->getRequest()->user() : auth()->user());
     }
 }
 

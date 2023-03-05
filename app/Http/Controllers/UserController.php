@@ -7,7 +7,6 @@ use App\Helpers\Helper;
 use Genocide\Radiocrud\Exceptions\CustomException;
 use Illuminate\Http\Request;
 use \Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
     //
@@ -25,7 +24,7 @@ class UserController extends Controller {
         );
     }
 
-    public function get(): JsonResponse {
+    public function getInfo(): JsonResponse {
         return Helper::result(
             UserAction::init()->getMember()
         );
@@ -37,9 +36,9 @@ class UserController extends Controller {
     public function login(Request $request): JsonResponse {
         return Helper::result(
             UserAction::init($request)
-            ->setValidationRule('login')
-            ->makeEloquentViaRequest()
-            ->loginByRequest('email', 'user')
+                ->setValidationRule('login')
+                ->makeEloquentViaRequest()
+                ->loginByRequest('email', 'user')
         );
     }
 
@@ -53,5 +52,17 @@ class UserController extends Controller {
             ->makeEloquentViaRequest()
             ->updateMemberByToken()
         );
+    }
+
+    /**
+     * @throws CustomException
+     */
+    public function sendCode(Request $request): JsonResponse {
+        return Helper::result(
+            UserAction::init($request)
+                ->setValidationRule('send-code')
+                ->makeEloquentViaRequest()
+                ->sendCode()
+        , ['ok' => 'true', 'message' => 'code sending']);
     }
 }

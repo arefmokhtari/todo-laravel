@@ -5,6 +5,6 @@ namespace App\Helpers\Traits;
 
 trait HasInitialize {
     public static function init(mixed ... $inits): static {
-        return new self(... $inits);
+        return new static(... $inits);
     }
 }

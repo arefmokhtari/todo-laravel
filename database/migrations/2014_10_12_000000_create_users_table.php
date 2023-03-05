@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone_number', 20)->nullable();
             $table->bigInteger('wallet_amount')->nullable();
             $table->bigInteger('otp')->nullable();
-            $table->bigInteger('otp_expires_at')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
             $table->string('password', 200);
             $table->boolean('should_change_password')->default(false);
             $table->timestamps();

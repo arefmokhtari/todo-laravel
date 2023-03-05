@@ -16,7 +16,7 @@ use \App\Http\Controllers\UserController;
 */
 
 Route::group(['middleware' => ['auth:user']], function(){
-    Route::get('/user',[UserController::class,'get']);
+    Route::get('/user',[UserController::class,'getInfo']);
 
     Route::put('/user', [UserController::class, 'update']);
 });
@@ -26,9 +26,12 @@ Route::post('/user', [UserController::class, 'store']);
 
 Route::post('/user/login', [UserController::class, 'login']);
 
+Route::post('/user/send-code', [UserController::class, 'sendCode']);
+
 //      -> Admin:
 
 Route::post('/admin', [AdminController::class, 'login']);
+
 
 
 //Route::post('/admin/create', function (){
