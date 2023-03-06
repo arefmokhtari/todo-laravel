@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Helpers\Classes\MemberAction;
 use App\Helpers\Traits\HasLogin;
+use App\Mail\SencCodeMail;
 use Carbon\Carbon;
 use Genocide\Radiocrud\Exceptions\CustomException;
 use Genocide\Radiocrud\Helpers;
@@ -11,6 +12,7 @@ use App\Models\User;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserAction extends MemberAction
 {
@@ -82,6 +84,7 @@ class UserAction extends MemberAction
                 'otp' => rand(1000, 9999),
                 'otp_expires_at' => Carbon::now(),
             ]);
+            Mail::to($this->getEloquent())->send(SencCodeMail::init($this->getEloquent()->otp));
         }
     }
 
@@ -112,7 +115,7 @@ class UserAction extends MemberAction
     /**
      * @throws CustomException
      */
-    public function changePassword() {
+    public function changePassword(): bool|int {
         $this->setEloquent($this->getMember());
 
         if($this->getEloquent()->should_change_password || Hash::check($this->getRequest()->current_password, $this->getEloquent()->password))

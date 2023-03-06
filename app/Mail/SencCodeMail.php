@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Helpers\Traits\HasInitialize;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 
 class SencCodeMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable, SerializesModels, HasInitialize;
 
     private mixed $code;
     /**
@@ -23,37 +24,9 @@ class SencCodeMail extends Mailable
         $this->code = $code;
     }
 
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Senc Code Mail',
-        );
+    public function build(): SencCodeMail {
+        return $this->subject('send email')->view('mail', ['otp' => $this->code]);
     }
 
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [];
-    }
 }
