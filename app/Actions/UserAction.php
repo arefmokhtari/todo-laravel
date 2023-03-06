@@ -61,12 +61,6 @@ class UserAction extends MemberAction
         return $this->setEloquent($this->getMember())->updateByRequest();
     }
 
-    public function setRequest(Request|null $request): static {
-        if(Helpers::convertToBoolean($request))
-            return parent::setRequest($request);
-        return $this;
-    }
-
     public function storeByRequest(callable $storing = null): mixed {
         return parent::storeByRequest(storing: function (&$data) {
             $data['password'] = Hash::make($data['password']);

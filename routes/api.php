@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AdminController;
 use \App\Http\Controllers\UserController;
+use \App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,14 +15,6 @@ use \App\Http\Controllers\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::group(['middleware' => ['auth:user']], function(){
-    Route::get('/user',[UserController::class,'getInfo']);
-
-    Route::put('/user', [UserController::class, 'update']);
-
-    Route::post('/user/change-password', [UserController::class, 'changePassword']);
-});
 
 //      -> user
 Route::post('/user', [UserController::class, 'store']);
@@ -35,8 +28,17 @@ Route::post('/user/check-otp', [UserController::class, 'checkOtp']);
 
 Route::post('/admin', [AdminController::class, 'login']);
 
+Route::group(['middleware' => ['auth:user']], function(){
+    Route::get('/user',[UserController::class,'getInfo']);
 
+    Route::put('/user', [UserController::class, 'update']);
 
+    Route::post('/user/change-password', [UserController::class, 'changePassword']);
+});
+
+Route::group(['middleware' => ['auth:admin']], function(){
+    Route::post('/category', [CategoryController::class, 'store']);
+});
 //Route::post('/admin/create', function (){
 //    \App\Models\Admin::create([
 //        'name' => 'aref',
