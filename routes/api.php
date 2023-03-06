@@ -37,8 +37,10 @@ Route::group(['middleware' => ['auth:user']], function(){
 });
 
 Route::group(['middleware' => ['auth:admin']], function(){
-    Route::post('/category', [CategoryController::class, 'store']);
+    Route::post('/admin/category', [CategoryController::class, 'store']);
+    Route::put('/admin/category/{id}', [CategoryController::class, 'update']);
 });
+
 //Route::post('/admin/create', function (){
 //    \App\Models\Admin::create([
 //        'name' => 'aref',

@@ -19,4 +19,15 @@ class CategoryController extends Controller
                 ->storeByRequest()
         );
     }
+
+    /**
+     * @throws CustomException
+     */
+    public function update(string $id, Request $request): JsonResponse {
+        return Helper::result(
+            CategoryAction::init($request)
+                ->setValidationRule('update')
+                ->updateByIdAndRequest($id)
+        );
+    }
 }

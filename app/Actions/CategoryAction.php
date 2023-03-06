@@ -14,6 +14,9 @@ class CategoryAction extends MainAction
             'title' => ['string', 'required',  'max:200'],
             'parent_id' => ['integer', 'nullable', ],
         ],
+        'update' => [
+            'title' => ['string', 'required',  'max:200'],
+        ],
     ];
     public function __construct(Request $request) {
         $this
