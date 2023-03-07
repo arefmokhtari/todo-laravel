@@ -24,9 +24,9 @@ class UserController extends Controller {
         );
     }
 
-    public function getInfo(): JsonResponse {
+    public function getInfo(Request $request): JsonResponse {
         return Helper::result(
-            UserAction::init()->getMember()
+            $request->user()
         );
     }
 

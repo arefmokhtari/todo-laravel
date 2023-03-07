@@ -2,19 +2,18 @@
 
 namespace App\Actions;
 
-use App\Helpers\Classes\MemberAction;
+use App\Helpers\Classes\MainAction;
 use App\Helpers\Traits\HasLogin;
 use App\Mail\SencCodeMail;
 use Carbon\Carbon;
 use Genocide\Radiocrud\Exceptions\CustomException;
-use Genocide\Radiocrud\Helpers;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
-class UserAction extends MemberAction
+class UserAction extends MainAction
 {
     use HasLogin;
     private int $sendCodeSecond = 30;
@@ -58,7 +57,7 @@ class UserAction extends MemberAction
      * @throws CustomException
      */
     public function updateMemberByToken(): bool|int {
-        return $this->setEloquent($this->getMember())->updateByRequest();
+        return $this->setEloquent($this->getUserFromRequest())->updateByRequest();
     }
 
     public function storeByRequest(callable $storing = null): mixed {
@@ -70,16 +69,17 @@ class UserAction extends MemberAction
     /**
      * @throws CustomException
      */
-    public function sendCode(): void {
+    public function sendCode(): null {
         $this->setUserByEmail();
 
-        if(!$this->getEloquent()->otp_expires_at || Carbon::now()->toDate()->diff(Carbon::parse($this->getEloquent()['otp_expires_at'])->toDate())->i > $this->sendCodeSecond) {
+        if(!$this->getEloquent()->otp_expires_at || Carbon::now()->diff(Carbon::parse($this->getEloquent()['otp_expires_at']))->i > $this->sendCodeSecond) {
             $this->updateByFieldQuery([
                 'otp' => rand(1000, 9999),
                 'otp_expires_at' => Carbon::now(),
             ]);
             Mail::to($this->getEloquent())->send(SencCodeMail::init($this->getEloquent()->otp));
         }
+        return ;
     }
 
     /**
@@ -110,7 +110,7 @@ class UserAction extends MemberAction
      * @throws CustomException
      */
     public function changePassword(): bool|int {
-        $this->setEloquent($this->getMember());
+        $this->setEloquent($this->getUserFromRequest());
 
         if($this->getEloquent()->should_change_password || Hash::check($this->getRequest()->current_password, $this->getEloquent()->password))
             return $this->updateByFieldQuery([
